@@ -223,12 +223,14 @@ class Recipe(Frame):
         
         self["borderwidth"] = 10
         self.grid()
+        
 
         # Label at top of the recipe window
         Label(self,
               text = "Recipe:", font = 10
               ).grid(row = 0, column = 0,columnspan = 4, sticky = W)
 
+        
         # Text box where the recipe will appear
         self.recipe_txt = Text(self, width = 60, height = 15, wrap = WORD)
         self.recipe_txt.grid(row = 1, column = 0, columnspan = 2)
@@ -237,11 +239,13 @@ class Recipe(Frame):
         self.show_bttn = Button(self, text = "Show Recipe", font = 12,
             command = self.print_recipe)
         self.show_bttn.grid(row = 1, column = 3)
-
-        # Button to save the recipe
+        
+         # Button to save the recipe
         self.save_bttn = Button(self, text = "Save Recipe", font = 12,
             command = self.save)
         self.save_bttn.grid(row = 2, column = 3)
+
+        
         
     # Called by the show recipe button
     def print_recipe(self):
@@ -276,13 +280,19 @@ class Recipe(Frame):
         recipe += malt1 + " " + malt2 + "lbs"
         recipe += "\nYeast:"
         recipe += yeast
-
+        
         # Insert the recipe text
-        self.recipe_txt.insert(0.0, name +"\n"+ now +"\n" + recipe)
+        self.recipe_txt.insert(0.0,"Recipe:" + name +"\n"+ now +"\n" + recipe)
 
-    # For a future function to savethe recipe
+    # For a future function to save the recipe
+    
+   
     def save(self):
-        print()
+    
+        # Need to get this to import correctly
+        f = open('Beers.txt', 'a')
+        f.write(self.recipe_txt.get(0.0, END))
+        
         
 
            
