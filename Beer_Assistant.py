@@ -10,6 +10,9 @@ from tkinter import *
 import time
 from threading import Timer
 
+
+
+
 class Application():
     def __init__(self, root):
         
@@ -27,6 +30,8 @@ class Application():
         self.recipe.grid(row=0, column=0, sticky="nsew")
 
         self.showIngredients()
+        
+        
             
     def showIngredients(self):
         self.ingredients.tkraise()
@@ -44,6 +49,9 @@ class Ingredients(Frame):
         
         self["borderwidth"] = 10
         self.grid()
+        self.remaining = 0
+               
+        
 
         # Title for frame
         Label(self,
@@ -148,8 +156,10 @@ class Ingredients(Frame):
         
         self.alert_lbl = Label(self, text = "")
         self.alert_lbl.grid(row = 5, column = 2, columnspan = 3)
-        self.alert_frame = Frame(self, borderwidth = 2, relief = "groove")
-        self.alert_frame.grid(row = 5, column = 2, columnspan = 3)
+        
+        #Label where countdown clock appears
+        self.countdown_lbl = Label(self, text = "", font = 12)
+        self.countdown_lbl.grid(row = 7, column = 2, columnspan = 2)
 
         # Button to show the recipe screen
         self.recipe_bttn = Button(self, text = "Recipe", font = 12,width = 12,
@@ -157,6 +167,7 @@ class Ingredients(Frame):
         self.recipe_bttn.grid(row = 1, column = 3)
 
         
+    
 
     # Timer method that will trigger the alert messages
     def timer(self):
@@ -197,7 +208,25 @@ class Ingredients(Frame):
     def timer_calls_1(self):
         self.alert_lbl.configure(text ="Add your specialty grains, steep for 30 minutes.")
         
-    # The cal of the second timer
+        # Call countdown with 120 seconds
+        self.countdown(120)
+
+    # Displaying the countdown clock
+    def countdown(self, remaining = None):
+        if remaining is not None:
+            self.remaining = remaining
+        if self.remaining <= 0:
+            self.countdown_lbl.configure(text ="00:00")
+        else:
+            m = self.remaining // 60
+            s = self.remaining % 60
+            self.countdown_lbl.configure(text = "%02d:%02d" %(m,s))
+            self.remaining -=1
+            self.after(1000, self.countdown)
+            
+        
+               
+    # The call of the second timer
     def timer_calls_2(self):
         self.alert_lbl.configure(text = "Add your bittering hops, and malt extract.")
 
@@ -232,18 +261,18 @@ class Recipe(Frame):
 
         
         # Text box where the recipe will appear
-        self.recipe_txt = Text(self, width = 60, height = 15, wrap = WORD)
+        self.recipe_txt = Text(self, width = 40, height = 15, wrap = WORD)
         self.recipe_txt.grid(row = 1, column = 0, columnspan = 2)
 
         # Button to produce the recipe on screen
         self.show_bttn = Button(self, text = "Show Recipe", font = 12,
             command = self.print_recipe)
-        self.show_bttn.grid(row = 1, column = 3)
+        self.show_bttn.grid(row = 1, column = 2)
         
          # Button to save the recipe
         self.save_bttn = Button(self, text = "Save Recipe", font = 12,
             command = self.save)
-        self.save_bttn.grid(row = 2, column = 3)
+        self.save_bttn.grid(row = 1, column = 3)
 
         
         
@@ -284,12 +313,10 @@ class Recipe(Frame):
         # Insert the recipe text
         self.recipe_txt.insert(0.0,"Recipe:" + name +"\n"+ now +"\n" + recipe)
 
-    # For a future function to save the recipe
-    
+    # Saving the beer recipe to a text file    
    
     def save(self):
     
-        # Need to get this to import correctly
         f = open('Beers.txt', 'a')
         f.write(self.recipe_txt.get(0.0, END))
         
