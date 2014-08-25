@@ -59,6 +59,7 @@ class Ingredients(Frame):
               font = 10
               ).grid(row = 0, column = 0, columnspan = 2, sticky = W)
 
+        # Recipe label
         Label(self,
               text = "Recipe name:",
               font = 8
@@ -208,7 +209,7 @@ class Ingredients(Frame):
     def timer_calls_1(self):
         self.alert_lbl.configure(text ="Add your specialty grains, steep for 30 minutes.")
         
-        # Call countdown with 120 seconds
+        # Call countdown with 120 seconds, for real beer change to 3600
         self.countdown(120)
 
     # Displaying the countdown clock
@@ -326,13 +327,6 @@ class Recipe(Frame):
         
         
            
-                
-
-
-
-
-
-    
 root = Tk()
 root.title("Automated Brewer's Assistant")
 root.geometry("600x300")
